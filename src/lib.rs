@@ -44,7 +44,7 @@ impl<'r> Into<Rect2U> for &'r Rect2F { fn into(self) -> Rect2U { Rect2U(self.0 a
 impl<'r> Into<Rect2>  for &'r Rect2F { fn into(self) -> Rect2  { Rect2 (self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
 
 /// 2D 座標系
-/// ## Example
+/// # Examples
 /// ```
 /// # use metrics::*;
 /// let p2 = Point2(8, 5);
@@ -64,7 +64,7 @@ pub trait Coordinate2 : Sized
     fn new(x: Self::Element, y: Self::Element) -> Self;
 }
 /// 2D サイズ
-/// ## Example
+/// # Examples
 /// ```
 /// # use metrics::*;
 /// let s2 = Size2(8, 6);
