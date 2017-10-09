@@ -248,6 +248,21 @@ impl<T: Coordinate2 + Copy> Mul<T> for Vector2 where T::Element: ScalarConvertib
     type Output = Vector2;
     fn mul(self, other: T) -> Vector2 { Vector2(self.0 * other.x()._as(), self.1 * other.y()._as()) }
 }
+impl<T: Coordinate2 + Copy> Add<T> for Point2 where T::Element: ScalarConvertible<i32>
+{
+    type Output = Self;
+    fn add(self, other: T) -> Self { Point2(self.0 + other.x()._as(), self.1 + other.y()._as()) }
+}
+impl<T: Coordinate2 + Copy> Add<T> for Point2U where T::Element: ScalarConvertible<u32>
+{
+    type Output = Self;
+    fn add(self, other: T) -> Self { Point2U(self.0 + other.x()._as(), self.1 + other.y()._as()) }
+}
+impl<T: Coordinate2 + Copy> Add<T> for Point2F where T::Element: ScalarConvertible<f32>
+{
+    type Output = Self;
+    fn add(self, other: T) -> Self { Point2F(self.0 + other.x()._as(), self.1 + other.y()._as()) }
+}
 
 // 表示データ生成
 macro_rules! Displayable
