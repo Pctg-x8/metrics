@@ -95,47 +95,9 @@ pub trait Size : Coordinate2 + Copy
     /// 伸ばす
     fn expand(self, x: Self::Element, y: Self::Element) -> Self { Self::new(self.width() + x, self.height() + y) }
 }
-
-impl Coordinate2 for Size2
-{
-    type Element = i32;
-    fn x(self) -> i32 { self.0 } fn y(self) -> i32 { self.1 } fn new(x: i32, y: i32) -> Self { Size2(x, y) }
-}
 impl Size for Size2 {}
-impl Coordinate2 for Size2U
-{
-    type Element = u32;
-    fn x(self) -> u32 { self.0 } fn y(self) -> u32 { self.1 } fn new(x: u32, y: u32) -> Self { Size2U(x, y) }
-}
 impl Size for Size2U {}
-impl Coordinate2 for Size2F
-{
-    type Element = f32;
-    fn x(self) -> f32 { self.0 } fn y(self) -> f32 { self.1 } fn new(x: f32, y: f32) -> Self { Size2F(x, y) }
-}
 impl Size for Size2F {}
-
-impl Coordinate2 for Point2
-{
-    type Element = i32;
-    fn x(self) -> i32 { self.0 } fn y(self) -> i32 { self.1 } fn new(x: i32, y: i32) -> Self { Point2(x, y) }
-}
-impl Coordinate2 for Point2U
-{
-    type Element = u32;
-    fn x(self) -> u32 { self.0 } fn y(self) -> u32 { self.1 } fn new(x: u32, y: u32) -> Self { Point2U(x, y) }
-}
-impl Coordinate2 for Point2F
-{
-    type Element = f32;
-    fn x(self) -> f32 { self.0 } fn y(self) -> f32 { self.1 } fn new(x: f32, y: f32) -> Self { Point2F(x, y) }
-}
-
-impl Coordinate2 for Vector2
-{
-    type Element = f32;
-    fn x(self) -> f32 { self.0 } fn y(self) -> f32 { self.1 } fn new(x: f32, y: f32) -> Self { Vector2(x, y) }
-}
 
 /// 2D 矩形
 pub trait Rect2T : Sized
@@ -220,13 +182,6 @@ impl Vector2
 // スカラー演算定義
 macro_rules! ScalarOps
 {
-    (for2 <$e: ty> $($t: ident),*) =>
-    {
-        $(
-            impl Mul<$e> for $t { type Output = Self; fn mul(self, other: $e) -> Self { $t(self.0 * other, self.1 * other) } }
-            impl Div<$e> for $t { type Output = Self; fn div(self, other: $e) -> Self { $t(self.0 / other, self.1 / other) } }
-        )*
-    };
     (for4 <$e: ty> $($t: ident),*) =>
     {
         $(
@@ -235,32 +190,9 @@ macro_rules! ScalarOps
         )*
     }
 }
-/// 加減算定義
-macro_rules! AddSubOps
-{
-    (for2 $($t: ident),+) =>
-    {
-        $(
-            impl<T: Coordinate2 + Copy> Add<T> for $t where T::Element: ScalarConvertible<<Self as Coordinate2>::Element>
-            {
-                type Output = Self;
-                fn add(self, other: T) -> Self { $t(self.0 + other.x()._as(), self.1 + other.y()._as()) }
-            }
-            impl<T: Coordinate2 + Copy> Sub<T> for $t where T::Element: ScalarConvertible<<Self as Coordinate2>::Element>
-            {
-                type Output = Self;
-                fn sub(self, other: T) -> Self { $t(self.0 - other.x()._as(), self.1 - other.y()._as()) }
-            }
-        )+
-    }
-}
-ScalarOps!(for2<f32> Size2F, Point2F, Vector2);
-ScalarOps!(for2<u32> Size2U, Point2U);
-ScalarOps!(for2<i32> Size2, Point2);
 ScalarOps!(for4<f32> Rect2F);
 ScalarOps!(for4<u32> Rect2U);
 ScalarOps!(for4<i32> Rect2);
-AddSubOps!(for2 Vector2, Point2, Point2U, Point2F);
 impl<T: Coordinate2 + Copy> Mul<T> for Vector2 where T::Element: ScalarConvertible<f32>
 {
     type Output = Vector2;

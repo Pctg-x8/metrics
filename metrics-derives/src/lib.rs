@@ -24,6 +24,26 @@ pub fn c2_implementor(input: TokenStream) -> TokenStream
                 fn y(self) -> #ety { self.1 }
                 fn new(x: #ety, y: #ety) -> Self { #name(x, y) }
             }
+            impl Mul<#ety> for #name
+            {
+                type Output = Self;
+                fn mul(self, other: #ety) -> Self { #name(self.0 * other, self.1 * other) }
+            }
+            impl Div<#ety> for #name
+            {
+                type Output = Self;
+                fn mul(self, other: #ety) -> Self { #name(self.0 / other, self.1 / other) }
+            }
+            impl<T: Coordinate2 + Copy> Add<T> for #name where T::Element: ScalarConvertible<<Self as Coordinate2>::Element>
+            {
+                type Output = Self;
+                fn add(self, other: T) -> Self { #name(self.0 + other.x()._as(), self.1 + other.y()._as()) }
+            }
+            impl<T: Coordinate2 + Copy> Sub<T> for #name where T::Element: ScalarConvertible<<Self as Coordinate2>::Element>
+            {
+                type Output = Self;
+                fn sub(self, other: T) -> Self { #name(self.0 - other.x()._as(), self.1 - other.y()._as()) }
+            }
         };
         gen.parse().unwrap()
     }
