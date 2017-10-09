@@ -1,21 +1,24 @@
 //! Metrics Definition
 
+#[macro_use]
+extern crate metrics_derives;
+
 use std::ops::*;
 
 /// 2D サイズ(整数)
-#[derive(Clone, Copy, Debug, PartialEq, Eq)] #[repr(C)] pub struct Size2(pub i32, pub i32);
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Size2(pub i32, pub i32);
 /// 2D サイズ(整数、符号なし)
-#[derive(Clone, Copy, Debug, PartialEq, Eq)] #[repr(C)] pub struct Size2U(pub u32, pub u32);
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Size2U(pub u32, pub u32);
 /// 2D サイズ(実数)
-#[derive(Clone, Copy, Debug, PartialEq)] #[repr(C)] pub struct Size2F(pub f32, pub f32);
+#[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Size2F(pub f32, pub f32);
 /// 2D 点(整数)
-#[derive(Clone, Copy, Debug, PartialEq, Eq)] #[repr(C)] pub struct Point2(pub i32, pub i32);
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Point2(pub i32, pub i32);
 /// 2D 点(整数、符号なし)
-#[derive(Clone, Copy, Debug, PartialEq, Eq)] #[repr(C)] pub struct Point2U(pub u32, pub u32);
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Point2U(pub u32, pub u32);
 /// 2D 点(実数)
-#[derive(Clone, Copy, Debug, PartialEq)] #[repr(C)] pub struct Point2F(pub f32, pub f32);
+#[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Point2F(pub f32, pub f32);
 /// 2D ベクトル
-#[derive(Clone, Copy, Debug, PartialEq)] #[repr(C)] pub struct Vector2(pub f32, pub f32);
+#[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Vector2(pub f32, pub f32);
 /// 2D 矩形(整数)
 #[derive(Clone, Debug, PartialEq, Eq)] #[repr(C)] pub struct Rect2(pub i32, pub i32, pub i32, pub i32);
 /// 2D 矩形(整数、符号なし)
@@ -232,36 +235,36 @@ macro_rules! ScalarOps
         )*
     }
 }
+/// 加減算定義
+macro_rules! AddSubOps
+{
+    (for2 $($t: ident),+) =>
+    {
+        $(
+            impl<T: Coordinate2 + Copy> Add<T> for $t where T::Element: ScalarConvertible<<Self as Coordinate2>::Element>
+            {
+                type Output = Self;
+                fn add(self, other: T) -> Self { $t(self.0 + other.x()._as(), self.1 + other.y()._as()) }
+            }
+            impl<T: Coordinate2 + Copy> Sub<T> for $t where T::Element: ScalarConvertible<<Self as Coordinate2>::Element>
+            {
+                type Output = Self;
+                fn sub(self, other: T) -> Self { $t(self.0 - other.x()._as(), self.1 - other.y()._as()) }
+            }
+        )+
+    }
+}
 ScalarOps!(for2<f32> Size2F, Point2F, Vector2);
 ScalarOps!(for2<u32> Size2U, Point2U);
 ScalarOps!(for2<i32> Size2, Point2);
 ScalarOps!(for4<f32> Rect2F);
 ScalarOps!(for4<u32> Rect2U);
 ScalarOps!(for4<i32> Rect2);
-impl<T: Coordinate2 + Copy> Add<T> for Vector2 where T::Element: ScalarConvertible<f32>
-{
-    type Output = Vector2;
-    fn add(self, other: T) -> Vector2 { Vector2(self.0 + other.x()._as(), self.1 + other.y()._as()) }
-}
+AddSubOps!(for2 Vector2, Point2, Point2U, Point2F);
 impl<T: Coordinate2 + Copy> Mul<T> for Vector2 where T::Element: ScalarConvertible<f32>
 {
     type Output = Vector2;
     fn mul(self, other: T) -> Vector2 { Vector2(self.0 * other.x()._as(), self.1 * other.y()._as()) }
-}
-impl<T: Coordinate2 + Copy> Add<T> for Point2 where T::Element: ScalarConvertible<i32>
-{
-    type Output = Self;
-    fn add(self, other: T) -> Self { Point2(self.0 + other.x()._as(), self.1 + other.y()._as()) }
-}
-impl<T: Coordinate2 + Copy> Add<T> for Point2U where T::Element: ScalarConvertible<u32>
-{
-    type Output = Self;
-    fn add(self, other: T) -> Self { Point2U(self.0 + other.x()._as(), self.1 + other.y()._as()) }
-}
-impl<T: Coordinate2 + Copy> Add<T> for Point2F where T::Element: ScalarConvertible<f32>
-{
-    type Output = Self;
-    fn add(self, other: T) -> Self { Point2F(self.0 + other.x()._as(), self.1 + other.y()._as()) }
 }
 
 // 表示データ生成
