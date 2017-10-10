@@ -17,6 +17,8 @@ use std::ops::*;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Point2U(pub u32, pub u32);
 /// 2D 点(実数)
 #[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Point2F(pub f32, pub f32);
+/// 2D 点(倍精度実数)
+#[derive(Clone, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Point2LF(pub f64, pub f64);
 /// 2D ベクトル
 #[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Vector2(pub f32, pub f32);
 /// 2D 矩形(整数)
@@ -33,12 +35,18 @@ impl Into<Size2>  for Size2U { fn into(self) -> Size2  { Size2 (self.0 as _, sel
 impl Into<Size2F> for Size2U { fn into(self) -> Size2F { Size2F(self.0 as _, self.1 as _) } }
 impl Into<Size2U> for Size2F { fn into(self) -> Size2U { Size2U(self.0 as _, self.1 as _) } }
 impl Into<Size2>  for Size2F { fn into(self) -> Size2  { Size2 (self.0 as _, self.1 as _) } }
-impl Into<Point2U> for Point2  { fn into(self) -> Point2U { Point2U(self.0 as _, self.1 as _) } }
-impl Into<Point2F> for Point2  { fn into(self) -> Point2F { Point2F(self.0 as _, self.1 as _) } }
-impl Into<Point2>  for Point2U { fn into(self) -> Point2  { Point2 (self.0 as _, self.1 as _) } }
-impl Into<Point2F> for Point2U { fn into(self) -> Point2F { Point2F(self.0 as _, self.1 as _) } }
-impl Into<Point2U> for Point2F { fn into(self) -> Point2U { Point2U(self.0 as _, self.1 as _) } }
-impl Into<Point2>  for Point2F { fn into(self) -> Point2  { Point2 (self.0 as _, self.1 as _) } }
+impl Into<Point2U>  for Point2   { fn into(self) -> Point2U  { Point2U (self.0 as _, self.1 as _) } }
+impl Into<Point2F>  for Point2   { fn into(self) -> Point2F  { Point2F (self.0 as _, self.1 as _) } }
+impl Into<Point2LF> for Point2   { fn into(self) -> Point2LF { Point2LF(self.0 as _, self.1 as _) } }
+impl Into<Point2>   for Point2U  { fn into(self) -> Point2   { Point2  (self.0 as _, self.1 as _) } }
+impl Into<Point2F>  for Point2U  { fn into(self) -> Point2F  { Point2F (self.0 as _, self.1 as _) } }
+impl Into<Point2LF> for Point2U  { fn into(self) -> Point2LF { Point2LF(self.0 as _, self.1 as _) } }
+impl Into<Point2U>  for Point2F  { fn into(self) -> Point2U  { Point2U (self.0 as _, self.1 as _) } }
+impl Into<Point2>   for Point2F  { fn into(self) -> Point2   { Point2  (self.0 as _, self.1 as _) } }
+impl Into<Point2LF> for Point2F  { fn into(self) -> Point2LF { Point2LF(self.0 as _, self.1 as _) } }
+impl Into<Point2U>  for Point2LF { fn into(self) -> Point2U  { Point2U (self.0 as _, self.1 as _) } }
+impl Into<Point2>   for Point2LF { fn into(self) -> Point2   { Point2  (self.0 as _, self.1 as _) } }
+impl Into<Point2F>  for Point2LF { fn into(self) -> Point2F  { Point2F (self.0 as _, self.1 as _) } }
 impl<'r> Into<Rect2U> for &'r Rect2  { fn into(self) -> Rect2U { Rect2U(self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
 impl<'r> Into<Rect2F> for &'r Rect2  { fn into(self) -> Rect2F { Rect2F(self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
 impl<'r> Into<Rect2>  for &'r Rect2U { fn into(self) -> Rect2  { Rect2 (self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
@@ -223,7 +231,7 @@ macro_rules! Displayable
         })*
     };
 }
-Displayable!(for Size2, Size2U, Size2F, Point2, Point2U, Point2F, Vector2);
+Displayable!(for Size2, Size2U, Size2F, Point2, Point2U, Point2F, Point2LF, Vector2);
 Displayable!(forRect Rect2, Rect2U, Rect2F);
 
 /// 同じビット配置であることを保証する
