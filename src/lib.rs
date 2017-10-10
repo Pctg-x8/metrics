@@ -68,9 +68,9 @@ pub trait Coordinate2 : Sized
     /// 要素の型
     type Element: Add<Output = Self::Element> + Sub<Output = Self::Element>;
     /// x座標
-    fn x(self) -> Self::Element;
+    fn x(&self) -> Self::Element;
     /// y座標
-    fn y(self) -> Self::Element;
+    fn y(&self) -> Self::Element;
     /// 生成
     fn new(x: Self::Element, y: Self::Element) -> Self;
 }
