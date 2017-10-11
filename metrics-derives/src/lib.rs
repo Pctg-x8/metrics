@@ -46,6 +46,7 @@ pub fn c2_implementor(input: TokenStream) -> TokenStream
                 type Output = Self;
                 fn sub(self, other: &T) -> Self { #name(self.0 - other.x()._as(), self.1 - other.y()._as()) }
             }
+            impl #name { pub const ZERO: #name = #name(0 as #ety, 0 as #ety); }
         };
         gen.parse().unwrap()
     }
