@@ -143,6 +143,15 @@ pub trait Rect2T : Sized
     /// オフセット
     fn offset(&self) -> Self::OffsetT { Self::OffsetT::new(self.left(), self.top()) }
 
+    /// 左上
+    fn lt(&self) -> Self::OffsetT { self.offset() }
+    /// 右上
+    fn rt(&self) -> Self::OffsetT { Self::OffsetT::new(self.right(), self.top()) }
+    /// 左下
+    fn lb(&self) -> Self::OffsetT { Self::OffsetT::new(self.left(), self.bottom()) }
+    /// 右下
+    fn rb(&self) -> Self::OffsetT { Self::OffsetT::new(self.right(), self.bottom()) }
+
     /// 拡張
     fn extend(&self, amount: Self::Element) -> Self { Self::new(self.left() - amount, self.top() - amount, self.right() + amount, self.bottom() + amount) }
 }
@@ -287,6 +296,7 @@ DefScalarConv!(f64 => u8, i8, u16, i16, u32, i32, u64, i64, usize, isize, f32, f
 #[cfg(windows)] unsafe impl MarkForSameBits<SIZE> for Size2 {}
 #[cfg(windows)] unsafe impl MarkForSameBits<RECT> for Rect2 {}
 #[cfg(windows)] impl<'p> From<&'p D2D1_SIZE_U> for Size2 { fn from(other: &'p D2D1_SIZE_U) -> Self { unsafe { std::mem::transmute_copy(other) } } }
+#[cfg(windows)] impl<'p> From<&'p D2D1_SIZE_U> for Size2U { fn from(other: &'p D2D1_SIZE_U) -> Self { unsafe { std::mem::transmute_copy(other) } } }
 #[cfg(windows)] impl<'p> From<&'p D2D1_SIZE_F> for Size2F { fn from(other: &'p D2D1_SIZE_F) -> Self { unsafe { std::mem::transmute_copy(other) } } }
 #[cfg(windows)] impl<'p> From<&'p D2D1_POINT_2U> for Point2 { fn from(other: &'p D2D1_POINT_2U) -> Self { unsafe { std::mem::transmute_copy(other) } } }
 #[cfg(windows)] impl<'p> From<&'p D2D1_POINT_2F> for Point2F { fn from(other: &'p D2D1_POINT_2F) -> Self { unsafe { std::mem::transmute_copy(other) } } }
