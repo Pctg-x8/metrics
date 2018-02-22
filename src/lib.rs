@@ -4,6 +4,7 @@
 extern crate metrics_derives;
 
 use std::ops::*;
+use std::borrow::Borrow;
 
 /// 2D サイズ(整数)
 #[derive(Clone, Debug, PartialEq, Coordinate2, Copy, Eq)]
@@ -272,8 +273,8 @@ macro_rules! MarkSameLayout
     {
         unsafe impl MarkForSameBits<$s> for $d {}
         unsafe impl MarkForSameBits<$d> for $s {}
-        impl AsRef<$s> for $d { fn as_ref(&self) -> &$s { transmute_safe(self) } }
-        impl AsRef<$d> for $s { fn as_ref(&self) -> &$d { transmute_safe(self) } }
+        impl Borrow<$s> for $d { fn borrow(&self) -> &$s { transmute_safe(self) } }
+        impl Borrow<$d> for $s { fn borrow(&self) -> &$d { transmute_safe(self) } }
     };
 }
 /// 保証済みなtransmute
