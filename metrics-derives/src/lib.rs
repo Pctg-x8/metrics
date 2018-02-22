@@ -36,15 +36,15 @@ pub fn c2_implementor(input: TokenStream) -> TokenStream
                 type Output = Self;
                 fn div(self, other: #ety) -> Self { #name(self.0 / other, self.1 / other) }
             }
-            impl<'a, T: Coordinate2> Add<&'a T> for #name where T::Element: ScalarConvertible<#ety> + Copy
+            impl<T: Coordinate2> Add<T> for #name where T::Element: ScalarConvertible<#ety>
             {
                 type Output = Self;
-                fn add(self, other: &T) -> Self { #name(self.0 + other.x()._as(), self.1 + other.y()._as()) }
+                fn add(self, other: T) -> Self { #name(self.0 + other.x()._as(), self.1 + other.y()._as()) }
             }
-            impl<'a, T: Coordinate2> Sub<&'a T> for #name where T::Element: ScalarConvertible<#ety> + Copy
+            impl<T: Coordinate2> Sub<T> for #name where T::Element: ScalarConvertible<#ety>
             {
                 type Output = Self;
-                fn sub(self, other: &T) -> Self { #name(self.0 - other.x()._as(), self.1 - other.y()._as()) }
+                fn sub(self, other: T) -> Self { #name(self.0 - other.x()._as(), self.1 - other.y()._as()) }
             }
             impl #name { pub const ZERO: #name = #name(0 as #ety, 0 as #ety); }
         };

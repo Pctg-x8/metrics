@@ -6,53 +6,61 @@ extern crate metrics_derives;
 use std::ops::*;
 
 /// 2D サイズ(整数)
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Size2(pub i32, pub i32);
+#[derive(Clone, Debug, PartialEq, Coordinate2, Copy, Eq)]
+#[repr(C)] pub struct Size2(pub i32, pub i32);
 /// 2D サイズ(整数、符号なし)
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Size2U(pub u32, pub u32);
+#[derive(Clone, Debug, PartialEq, Coordinate2, Copy, Eq)]
+#[repr(C)] pub struct Size2U(pub u32, pub u32);
 /// 2D サイズ(実数)
-#[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Size2F(pub f32, pub f32);
+#[derive(Clone, Debug, PartialEq, Coordinate2, Copy)]
+#[repr(C)] pub struct Size2F(pub f32, pub f32);
 /// 2D 点(整数)
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Point2(pub i32, pub i32);
+#[derive(Clone, Debug, PartialEq, Coordinate2, Copy, Eq)]
+#[repr(C)] pub struct Point2(pub i32, pub i32);
 /// 2D 点(整数、符号なし)
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Coordinate2)] #[repr(C)] pub struct Point2U(pub u32, pub u32);
+#[derive(Clone, Debug, PartialEq, Coordinate2, Copy, Eq)]
+#[repr(C)] pub struct Point2U(pub u32, pub u32);
 /// 2D 点(実数)
-#[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Point2F(pub f32, pub f32);
+#[derive(Clone, Debug, PartialEq, Coordinate2, Copy)]
+#[repr(C)] pub struct Point2F(pub f32, pub f32);
 /// 2D 点(倍精度実数)
-#[derive(Clone, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Point2LF(pub f64, pub f64);
+#[derive(Clone, Debug, PartialEq, Coordinate2)]
+#[repr(C)] pub struct Point2LF(pub f64, pub f64);
 /// 2D ベクトル
-#[derive(Clone, Copy, Debug, PartialEq, Coordinate2)] #[repr(C)] pub struct Vector2(pub f32, pub f32);
+#[derive(Clone, Debug, PartialEq, Coordinate2, Copy)]
+#[repr(C)] pub struct Vector2(pub f32, pub f32);
 /// 2D 矩形(整数)
-#[derive(Clone, Debug, PartialEq, Eq)] #[repr(C)] pub struct Rect2(pub i32, pub i32, pub i32, pub i32);
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[repr(C)] pub struct Rect2(pub i32, pub i32, pub i32, pub i32);
 /// 2D 矩形(整数、符号なし)
-#[derive(Clone, Debug, PartialEq, Eq)] #[repr(C)] pub struct Rect2U(pub u32, pub u32, pub u32, pub u32);
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[repr(C)] pub struct Rect2U(pub u32, pub u32, pub u32, pub u32);
 /// 2D 矩形(実数)
-#[derive(Clone, Debug, PartialEq)] #[repr(C)] pub struct Rect2F(pub f32, pub f32, pub f32, pub f32);
+#[derive(Clone, Debug, PartialEq)]
+#[repr(C)] pub struct Rect2F(pub f32, pub f32, pub f32, pub f32);
 
 // 相互変換
-impl Into<Size2U> for Size2  { fn into(self) -> Size2U { Size2U(self.0 as _, self.1 as _) } }
-impl Into<Size2F> for Size2  { fn into(self) -> Size2F { Size2F(self.0 as _, self.1 as _) } }
-impl Into<Size2>  for Size2U { fn into(self) -> Size2  { Size2 (self.0 as _, self.1 as _) } }
-impl Into<Size2F> for Size2U { fn into(self) -> Size2F { Size2F(self.0 as _, self.1 as _) } }
-impl Into<Size2U> for Size2F { fn into(self) -> Size2U { Size2U(self.0 as _, self.1 as _) } }
-impl Into<Size2>  for Size2F { fn into(self) -> Size2  { Size2 (self.0 as _, self.1 as _) } }
-impl Into<Point2U>  for Point2   { fn into(self) -> Point2U  { Point2U (self.0 as _, self.1 as _) } }
-impl Into<Point2F>  for Point2   { fn into(self) -> Point2F  { Point2F (self.0 as _, self.1 as _) } }
-impl Into<Point2LF> for Point2   { fn into(self) -> Point2LF { Point2LF(self.0 as _, self.1 as _) } }
-impl Into<Point2>   for Point2U  { fn into(self) -> Point2   { Point2  (self.0 as _, self.1 as _) } }
-impl Into<Point2F>  for Point2U  { fn into(self) -> Point2F  { Point2F (self.0 as _, self.1 as _) } }
-impl Into<Point2LF> for Point2U  { fn into(self) -> Point2LF { Point2LF(self.0 as _, self.1 as _) } }
-impl Into<Point2U>  for Point2F  { fn into(self) -> Point2U  { Point2U (self.0 as _, self.1 as _) } }
-impl Into<Point2>   for Point2F  { fn into(self) -> Point2   { Point2  (self.0 as _, self.1 as _) } }
-impl Into<Point2LF> for Point2F  { fn into(self) -> Point2LF { Point2LF(self.0 as _, self.1 as _) } }
-impl Into<Point2U>  for Point2LF { fn into(self) -> Point2U  { Point2U (self.0 as _, self.1 as _) } }
-impl Into<Point2>   for Point2LF { fn into(self) -> Point2   { Point2  (self.0 as _, self.1 as _) } }
-impl Into<Point2F>  for Point2LF { fn into(self) -> Point2F  { Point2F (self.0 as _, self.1 as _) } }
-impl<'r> Into<Rect2U> for &'r Rect2  { fn into(self) -> Rect2U { Rect2U(self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
-impl<'r> Into<Rect2F> for &'r Rect2  { fn into(self) -> Rect2F { Rect2F(self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
-impl<'r> Into<Rect2>  for &'r Rect2U { fn into(self) -> Rect2  { Rect2 (self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
-impl<'r> Into<Rect2F> for &'r Rect2U { fn into(self) -> Rect2F { Rect2F(self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
-impl<'r> Into<Rect2U> for &'r Rect2F { fn into(self) -> Rect2U { Rect2U(self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
-impl<'r> Into<Rect2>  for &'r Rect2F { fn into(self) -> Rect2  { Rect2 (self.0 as _, self.1 as _, self.2 as _, self.3 as _) } }
+macro_rules! IntoByCasting
+{
+    (2 $org: ty => $($to: ty),+) =>
+    {
+        $(impl From<$org> for $to { fn from(v: $org) -> Self { Self::new(v.0 as _, v.1 as _) } })+
+    };
+    (4 $org: ty => $($to: ty),+) =>
+    {
+        $(impl From<$org> for $to { fn from(v: $org) -> Self { Self::new(v.0 as _, v.1 as _, v.2 as _, v.3 as _) } })+
+    };
+}
+IntoByCasting!(2 Size2 => Size2U, Size2F);
+IntoByCasting!(2 Size2U => Size2, Size2F);
+IntoByCasting!(2 Size2F => Size2, Size2U);
+IntoByCasting!(2 Point2 => Point2U, Point2F, Point2LF);
+IntoByCasting!(2 Point2U => Point2, Point2F, Point2LF);
+IntoByCasting!(2 Point2F => Point2U, Point2, Point2LF);
+IntoByCasting!(2 Point2LF => Point2U, Point2F, Point2);
+IntoByCasting!(4 Rect2 => Rect2U, Rect2F);
+IntoByCasting!(4 Rect2U => Rect2, Rect2F);
+IntoByCasting!(4 Rect2F => Rect2U, Rect2);
 
 /// 2D 座標系
 /// # Examples
@@ -63,16 +71,16 @@ impl<'r> Into<Rect2>  for &'r Rect2F { fn into(self) -> Rect2  { Rect2 (self.0 a
 /// assert_eq!(p2.x(), 8);
 /// assert_eq!(p2.y(), 5);
 /// ```
-pub trait Coordinate2 : Sized
+pub trait Coordinate2
 {
     /// 要素の型
-    type Element: Add<Output = Self::Element> + Sub<Output = Self::Element>;
+    type Element;
     /// x座標
     fn x(&self) -> Self::Element;
     /// y座標
     fn y(&self) -> Self::Element;
     /// 生成
-    fn new(x: Self::Element, y: Self::Element) -> Self;
+    fn new(x: Self::Element, y: Self::Element) -> Self where Self: Sized;
 }
 /// 2D サイズ
 /// # Examples
@@ -87,40 +95,47 @@ pub trait Coordinate2 : Sized
 /// assert_eq!(s2.expand(2, 3), Size2(8 + 2, 6 + 3));
 /// assert_eq!(s2.shrink(2, 3), Size2(8 - 2, 6 - 3));
 /// ```
-pub trait Size : Coordinate2 + Copy
+pub trait Size : Coordinate2
 {
     /// 幅
-    fn width(self) -> Self::Element { self.x() }
+    fn width(&self) -> Self::Element { self.x() }
     /// 高さ
-    fn height(self) -> Self::Element { self.y() }
+    fn height(&self) -> Self::Element { self.y() }
 
     /// アスペクト比(縦/横)を計算する
-    fn aspect_w(self) -> f32 where Self::Element: ScalarConvertible<f32> { self.height()._as() / self.width()._as() }
+    fn aspect_w(&self) -> f32 where Self::Element: ScalarConvertible<f32> { self.height()._as() / self.width()._as() }
     /// アスペクト比(横/縦)を計算する
-    fn aspect_h(self) -> f32 where Self::Element: ScalarConvertible<f32> { self.width()._as() / self.height()._as() }
+    fn aspect_h(&self) -> f32 where Self::Element: ScalarConvertible<f32> { self.width()._as() / self.height()._as() }
     /// 縮める
-    fn shrink(self, x: Self::Element, y: Self::Element) -> Self { Self::new(self.width() - x, self.height() - y) }
+    fn shrink(&self, x: Self::Element, y: Self::Element) -> Self where Self: Sized, Self::Element: Sub<Self::Element, Output = Self::Element>
+    {
+        Self::new(self.width() - x, self.height() - y)
+    }
     /// 伸ばす
-    fn expand(self, x: Self::Element, y: Self::Element) -> Self { Self::new(self.width() + x, self.height() + y) }
+    fn expand(&self, x: Self::Element, y: Self::Element) -> Self where Self: Sized, Self::Element: Add<Self::Element, Output = Self::Element>
+    {
+        Self::new(self.width() + x, self.height() + y)
+    }
 }
 impl Size for Size2 {}
 impl Size for Size2U {}
 impl Size for Size2F {}
 
 /// 2D 矩形
-pub trait Rect2T : Sized
+pub trait Rect2T
 {
     /// 要素の型
-    type Element: ScalarConvertible<f32> + Add<Output = Self::Element> + Sub<Output = Self::Element> + Copy;
+    type Element;
     /// サイズの型
     type SizeT: Size<Element = Self::Element>;
     /// オフセットの型
     type OffsetT: Coordinate2<Element = Self::Element>;
 
     /// 生成
-    fn new(left: Self::Element, top: Self::Element, right: Self::Element, bottom: Self::Element) -> Self;
+    fn new(left: Self::Element, top: Self::Element, right: Self::Element, bottom: Self::Element) -> Self where Self: Sized;
     /// オフセットとサイズから生成
     fn from_offset_and_size<O: Into<Self::OffsetT> + Copy, S: Into<Self::SizeT> + Copy>(offs: O, size: S) -> Self
+        where Self: Sized, Self::Element: Add<Self::Element, Output = Self::Element>
     {
         Self::new(offs.into().x(), offs.into().y(), offs.into().x() + size.into().width(), offs.into().y() + size.into().height())
     }
@@ -139,7 +154,10 @@ pub trait Rect2T : Sized
     /// 縦位置
     fn y(&self) -> Self::Element { self.top() }
     /// サイズ
-    fn size(&self) -> Self::SizeT { Self::SizeT::new(self.right() - self.left(), self.bottom() - self.top()) }
+    fn size(&self) -> Self::SizeT where Self::Element: Sub<Self::Element, Output = Self::Element>
+    {
+        Self::SizeT::new(self.right() - self.left(), self.bottom() - self.top())
+    }
     /// オフセット
     fn offset(&self) -> Self::OffsetT { Self::OffsetT::new(self.left(), self.top()) }
 
@@ -153,7 +171,10 @@ pub trait Rect2T : Sized
     fn rb(&self) -> Self::OffsetT { Self::OffsetT::new(self.right(), self.bottom()) }
 
     /// 拡張
-    fn extend(&self, amount: Self::Element) -> Self { Self::new(self.left() - amount, self.top() - amount, self.right() + amount, self.bottom() + amount) }
+    fn extend(&self, amount: Self::Element) -> Self where Self: Sized, Self::Element: Sub<Self::Element, Output = Self::Element> + Add<Self::Element, Output = Self::Element> + Clone
+    {
+        Self::new(self.left() - amount.clone(), self.top() - amount.clone(), self.right() + amount.clone(), self.bottom() + amount)
+    }
 }
 impl Rect2T for Rect2
 {
@@ -210,7 +231,7 @@ macro_rules! ScalarOps
 ScalarOps!(for4<f32> Rect2F);
 ScalarOps!(for4<u32> Rect2U);
 ScalarOps!(for4<i32> Rect2);
-impl<T: Coordinate2 + Copy> Mul<T> for Vector2 where T::Element: ScalarConvertible<f32>
+impl<T: Coordinate2> Mul<T> for Vector2 where T::Element: ScalarConvertible<f32>
 {
     type Output = Vector2;
     fn mul(self, other: T) -> Vector2 { Vector2(self.0 * other.x()._as(), self.1 * other.y()._as()) }
@@ -245,20 +266,25 @@ Displayable!(forRect Rect2, Rect2U, Rect2F);
 
 /// 同じビット配置であることを保証する
 pub unsafe trait MarkForSameBits<T> {}
+macro_rules! MarkSameLayout
+{
+    ($s: ty = $d: ty) =>
+    {
+        unsafe impl MarkForSameBits<$s> for $d {}
+        unsafe impl MarkForSameBits<$d> for $s {}
+        impl AsRef<$s> for $d { fn as_ref(&self) -> &$s { transmute_safe(self) } }
+        impl AsRef<$d> for $s { fn as_ref(&self) -> &$d { transmute_safe(self) } }
+    };
+}
 /// 保証済みなtransmute
 pub fn transmute_safe<T: MarkForSameBits<U>, U>(input: &T) -> &U { unsafe { std::mem::transmute(input) } }
 /// CoerceSameBitsがしっかり定義してあれば配列も高速にへんかんできる
 pub fn transmute_array<T: MarkForSameBits<U>, U>(input: &[T]) -> &[U] { unsafe { std::mem::transmute(input) } }
-unsafe impl MarkForSameBits<Point2> for Size2 {}
-unsafe impl MarkForSameBits<Size2> for Point2 {}
-unsafe impl MarkForSameBits<Point2U> for Size2U {}
-unsafe impl MarkForSameBits<Size2U> for Point2U {}
-unsafe impl MarkForSameBits<Point2F> for Size2F {}
-unsafe impl MarkForSameBits<Size2F> for Point2F {}
-unsafe impl MarkForSameBits<Point2F> for Vector2 {}
-unsafe impl MarkForSameBits<Size2F> for Vector2 {}
-unsafe impl MarkForSameBits<Vector2> for Point2F {}
-unsafe impl MarkForSameBits<Vector2> for Size2F {}
+MarkSameLayout!(Point2  = Size2);
+MarkSameLayout!(Point2U = Size2U);
+MarkSameLayout!(Point2F = Size2F);
+MarkSameLayout!(Vector2 = Point2F);
+MarkSameLayout!(Vector2 = Size2F);
 
 /// 整数 <-> 実数間の変換を定義する
 pub trait ScalarConvertible<T> { fn _as(self) -> T; }
@@ -286,28 +312,25 @@ DefScalarConv!(f64 => u8, i8, u16, i16, u32, i32, u64, i64, usize, isize, f32, f
 #[cfg(windows)] extern crate winapi;
 #[cfg(windows)] use winapi::shared::windef::{RECT, POINT, SIZE};
 #[cfg(windows)] use winapi::um::d2d1::*;
-#[cfg(windows)] unsafe impl MarkForSameBits<D2D1_SIZE_U> for Size2U {}
-#[cfg(windows)] unsafe impl MarkForSameBits<D2D1_SIZE_F> for Size2F {}
-#[cfg(windows)] unsafe impl MarkForSameBits<D2D1_POINT_2U> for Point2U {}
-#[cfg(windows)] unsafe impl MarkForSameBits<D2D1_POINT_2F> for Point2F {}
-#[cfg(windows)] unsafe impl MarkForSameBits<D2D1_RECT_U> for Rect2U {}
-#[cfg(windows)] unsafe impl MarkForSameBits<D2D1_RECT_F> for Rect2F {}
-#[cfg(windows)] unsafe impl MarkForSameBits<POINT> for Point2 {}
-#[cfg(windows)] unsafe impl MarkForSameBits<SIZE> for Size2 {}
-#[cfg(windows)] unsafe impl MarkForSameBits<RECT> for Rect2 {}
-#[cfg(windows)] impl<'p> From<&'p D2D1_SIZE_U> for Size2 { fn from(other: &'p D2D1_SIZE_U) -> Self { unsafe { std::mem::transmute_copy(other) } } }
-#[cfg(windows)] impl<'p> From<&'p D2D1_SIZE_U> for Size2U { fn from(other: &'p D2D1_SIZE_U) -> Self { unsafe { std::mem::transmute_copy(other) } } }
-#[cfg(windows)] impl<'p> From<&'p D2D1_SIZE_F> for Size2F { fn from(other: &'p D2D1_SIZE_F) -> Self { unsafe { std::mem::transmute_copy(other) } } }
-#[cfg(windows)] impl<'p> From<&'p D2D1_POINT_2U> for Point2 { fn from(other: &'p D2D1_POINT_2U) -> Self { unsafe { std::mem::transmute_copy(other) } } }
-#[cfg(windows)] impl<'p> From<&'p D2D1_POINT_2F> for Point2F { fn from(other: &'p D2D1_POINT_2F) -> Self { unsafe { std::mem::transmute_copy(other) } } }
-#[cfg(windows)] impl<'p> From<&'p D2D1_POINT_2F> for Vector2 { fn from(other: &'p D2D1_POINT_2F) -> Self { unsafe { std::mem::transmute_copy(other) } } }
-#[cfg(windows)] impl<'p> From<&'p D2D1_RECT_F> for Rect2F { fn from(other: &'p D2D1_RECT_F) -> Self { unsafe { std::mem::transmute_copy(other) } } }
-#[cfg(windows)] impl<'p> From<&'p POINT> for Point2 { fn from(other: &'p POINT) -> Self { Point2(other.x, other.y) } }
-#[cfg(windows)] impl<'p> From<&'p SIZE> for Size2 { fn from(other: &'p SIZE) -> Self { Size2(other.cx, other.cy) } }
-#[cfg(windows)] impl<'p> From<&'p RECT> for Rect2 { fn from(other: &'p RECT) -> Self { Rect2(other.left, other.top, other.right, other.bottom) } }
-#[cfg(windows)] impl<'p> Into<POINT> for &'p Point2 { fn into(self) -> POINT { POINT { x: self.0 as _, y: self.1 as _ } } }
-#[cfg(windows)] impl<'p> Into<SIZE> for &'p Size2 { fn into(self) -> SIZE { SIZE { cx: self.0 as _, cy: self.1 as _ } } }
-#[cfg(windows)] impl<'p> Into<RECT> for &'p Rect2 { fn into(self) -> RECT { RECT { left: self.0 as _, top: self.1 as _, right: self.2 as _, bottom: self.3 as _ } } }
+#[cfg(windows)] MarkSameLayout!(Size2U = D2D1_SIZE_U);
+#[cfg(windows)] MarkSameLayout!(Size2F = D2D1_SIZE_F);
+#[cfg(windows)] MarkSameLayout!(Point2U = D2D1_POINT_2U);
+#[cfg(windows)] MarkSameLayout!(Point2F = D2D1_POINT_2F);
+#[cfg(windows)] MarkSameLayout!(Rect2U = D2D1_RECT_U);
+#[cfg(windows)] MarkSameLayout!(Rect2F = D2D1_RECT_F);
+#[cfg(windows)] MarkSameLayout!(Point2 = POINT);
+#[cfg(windows)] MarkSameLayout!(Size2 = SIZE);
+#[cfg(windows)] MarkSameLayout!(Rect2 = RECT);
+#[cfg(windows)] impl From<D2D1_SIZE_U> for Size2 { fn from(other: D2D1_SIZE_U) -> Self { unsafe { std::mem::transmute(other) } } }
+#[cfg(windows)] impl From<D2D1_SIZE_U> for Size2U { fn from(other: D2D1_SIZE_U) -> Self { unsafe { std::mem::transmute(other) } } }
+#[cfg(windows)] impl From<D2D1_SIZE_F> for Size2F { fn from(other: D2D1_SIZE_F) -> Self { unsafe { std::mem::transmute(other) } } }
+#[cfg(windows)] impl From<D2D1_POINT_2U> for Point2 { fn from(other: D2D1_POINT_2U) -> Self { unsafe { std::mem::transmute(other) } } }
+#[cfg(windows)] impl From<D2D1_POINT_2F> for Point2F { fn from(other: D2D1_POINT_2F) -> Self { unsafe { std::mem::transmute(other) } } }
+#[cfg(windows)] impl From<D2D1_POINT_2F> for Vector2 { fn from(other: D2D1_POINT_2F) -> Self { unsafe { std::mem::transmute(other) } } }
+#[cfg(windows)] impl From<D2D1_RECT_F> for Rect2F { fn from(other: D2D1_RECT_F) -> Self { unsafe { std::mem::transmute(other) } } }
+#[cfg(windows)] impl From<POINT> for Point2 { fn from(other: POINT) -> Self { Point2(other.x, other.y) } }
+#[cfg(windows)] impl From<SIZE> for Size2 { fn from(other: SIZE) -> Self { Size2(other.cx, other.cy) } }
+#[cfg(windows)] impl From<RECT> for Rect2 { fn from(other: RECT) -> Self { Rect2(other.left, other.top, other.right, other.bottom) } }
 
 #[cfg(test)]
 mod test
