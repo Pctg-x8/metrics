@@ -237,6 +237,21 @@ impl<T: Coordinate2> Mul<T> for Vector2 where T::Element: ScalarConvertible<f32>
     type Output = Vector2;
     fn mul(self, other: T) -> Vector2 { Vector2(self.0 * other.x()._as(), self.1 * other.y()._as()) }
 }
+/// サイズ割
+impl<T: Size> Div<T> for Rect2F where T::Element: ScalarConvertible<f32>
+{
+    type Output = Self;
+    fn div(self, other: T) -> Rect2F
+    {
+        Rect2F(self.0 / other.width()._as(), self.1 / other.height()._as(), self.2 / other.width()._as(), self.3 / other.height()._as())
+    }
+}
+/// サイズ割 自動クローン
+impl<'a, T: Size> Div<T> for &'a Rect2F where T::Element: ScalarConvertible<f32>
+{
+    type Output = Rect2F;
+    fn div(self, other: T) -> Rect2F { self.clone() / other }
+}
 
 // 表示データ生成
 macro_rules! Displayable
