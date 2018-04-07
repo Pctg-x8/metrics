@@ -262,6 +262,12 @@ impl Div<Size2F> for Point2F
 {
     type Output = Self; fn div(self, other: Size2F) -> Self { Point2F(self.0 / other.0, self.1 / other.1) }
 }
+/// 移動
+impl Add<Point2F> for Rect2F
+{
+    type Output = Self;
+    fn add(self, other: Point2F) -> Self { Rect2F(self.0 + other.0, self.1 + other.1, self.2 + other.0, self.3 + other.1) }
+}
 // 表示データ生成
 macro_rules! Displayable
 {
