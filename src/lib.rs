@@ -252,7 +252,16 @@ impl<'a, T: Size> Div<T> for &'a Rect2F where T::Element: ScalarConvertible<f32>
     type Output = Rect2F;
     fn div(self, other: T) -> Rect2F { self.clone() / other }
 }
-
+/// 分配
+impl Div for Size2F
+{
+    type Output = Self; fn div(self, other: Self) -> Self { Size2F(self.0 / other.0, self.1 / other.1) }
+}
+/// サイズ割 点
+impl Div<Size2F> for Point2F
+{
+    type Output = Self; fn div(self, other: Size2F) -> Self { Point2F(self.0 / other.0, self.1 / other.1) }
+}
 // 表示データ生成
 macro_rules! Displayable
 {
