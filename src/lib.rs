@@ -52,13 +52,13 @@ macro_rules! IntoByCasting
         $(impl From<$org> for $to { fn from(v: $org) -> Self { Self::new(v.0 as _, v.1 as _, v.2 as _, v.3 as _) } })+
     };
 }
-IntoByCasting!(2 Size2 => Size2U, Size2F);
-IntoByCasting!(2 Size2U => Size2, Size2F);
-IntoByCasting!(2 Size2F => Size2, Size2U);
-IntoByCasting!(2 Point2 => Point2U, Point2F, Point2LF);
-IntoByCasting!(2 Point2U => Point2, Point2F, Point2LF);
-IntoByCasting!(2 Point2F => Point2U, Point2, Point2LF);
-IntoByCasting!(2 Point2LF => Point2U, Point2F, Point2);
+IntoByCasting!(2 Size2 => Size2U, Size2F, Point2, Point2F, Point2U, Point2LF);
+IntoByCasting!(2 Size2U => Size2, Size2F, Point2, Point2F, Point2U, Point2LF);
+IntoByCasting!(2 Size2F => Size2, Size2U, Point2, Point2F, Point2U, Point2LF);
+IntoByCasting!(2 Point2 => Point2U, Point2F, Point2LF, Size2, Size2U, Size2F);
+IntoByCasting!(2 Point2U => Point2, Point2F, Point2LF, Size2, Size2U, Size2F);
+IntoByCasting!(2 Point2F => Point2U, Point2, Point2LF, Size2, Size2U, Size2F);
+IntoByCasting!(2 Point2LF => Point2U, Point2F, Point2, Size2, Size2U, Size2F);
 IntoByCasting!(4 Rect2 => Rect2U, Rect2F);
 IntoByCasting!(4 Rect2U => Rect2, Rect2F);
 IntoByCasting!(4 Rect2F => Rect2U, Rect2);
